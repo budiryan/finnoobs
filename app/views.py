@@ -1,7 +1,7 @@
 from app import app
+from flask import render_template
 
 
-@app.route('/')
-@app.route('/index')
+@app.route('/', methods=['GET', 'POST'])
 def index():
-    return "Hello, World!"
+    return render_template("index.html", title='Home')

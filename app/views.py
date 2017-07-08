@@ -1,6 +1,6 @@
 from app import app
 from flask import Flask, render_template, g, request, flash, redirect, url_for
-from .forms import LoginForm
+from .forms import LoginForm, SearchForm, UserRateSubmissionsForm, UserAddStoreForm
 import sqlite3
 
 
@@ -25,8 +25,9 @@ def get_db():
 @app.route('/', methods=['GET', 'POST'])
 @app.route('/index')
 def index():
-	# returns a string, to be displayed on the client's web browser. 
-    return render_template("index.html", title='Home')
+    # returns a string, to be displayed on the client's web browser.
+    form = SearchForm(request.form)
+    return render_template("index.html", title='Home', form=form)
 
 
 @app.route('/store/<store_id>', methods=['GET', 'POST'])

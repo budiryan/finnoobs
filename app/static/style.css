@@ -83,7 +83,7 @@ body {
     width: 100%;
     height: 70%;
     text-align: center;
-    background: url('https://raw.githubusercontent.com/budiryan/finnoobs/master/startbootstrap-business-frontpage-gh-pages/bg_only.jpg?token=ATEgF0yozSEKmhIhmy7WuhB2eYHAWr__ks5ZafIPwA%3D%3D') no-repeat center center scroll;
+    background: url('images/bg_only.jpg') no-repeat center center scroll;
     -webkit-background-size: cover;
     -moz-background-size: cover;
     background-size: cover;

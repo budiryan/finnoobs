@@ -83,10 +83,6 @@ def store(store_id):
         flash('Update received, thank you!')
         time.sleep(3)
         return redirect('/store/' + store_id)
-        
-
-
-
 
     return render_template("store.html", store_uuid=store_uuid, latitude=latitude, longitude=longitude,
                            display_name=display_name, strikes=strikes, safety_ratings=safety_ratings,
@@ -105,7 +101,6 @@ def user(username):
     print(user_info)
     strikes, username, password = user_info
 
-    
     return render_template("user.html", username=username, strikes=strikes)
 
 
@@ -135,4 +130,42 @@ def search():
     amount = request.form.get('amount')
     fromCurrency = request.form.get('fromCurrency')
     toCurrency = request.form.get('toCurrency')
+    db = get_db()
+    cursor = db.cursor()
+    all_rows =  list(cursor.execute('select storeUUID, latitude, longitude, displayName from stores').fetchall())
+    all_rows = [list(row) for row in all_rows]
+
+    # Separate query for getting the rating
+    list_of_ratings = list(cursor.execute('select * from safetyRatings'))
+    list_of_ratings = [list(rating) for rating in list_of_ratings]
+    # Concatenate each row of all the stores with averaged rating
+    for index, row in enumerate(all_rows):
+        count = 0
+        rating_sum = 0
+        for rating in list_of_ratings:
+            if row[0] == rating[2]:
+                count += 1
+                rating_sum += rating[1]
+        average_rating = rating_sum / float(count)
+        all_rows[index].append(average_rating)
+
+    list_of_store_reports = list(cursor.execute('select * from storeRateSubmissions ORDER BY datetime(timestamp) DESC'))
+    list_of_store_reports = [list(report) for report in list_of_store_reports]
+    filtered_list_of_store_reports = []
+    for index, report in enumerate(list_of_store_reports):
+        # LOL only keep if the store has the exchange rate which was required
+        if fromCurrency == report[2] and toCurrency == report[3]:
+            filtered_list_of_store_reports.append(report)
+    print(filtered_list_of_store_reports)
+
+    filtered_all_rows = []
+    for index, report in enumerate(filtered_list_of_store_reports):
+        for row in all_rows:
+            if report[0] == row[0]:
+                filtered_all_rows.append(row + report[1:])
+
+    # Format: Store ID, displayName, avg_rating, fromCurrency, toCurrency, rate
+    print('filtered: ', filtered_all_rows)
+
+    # Assuming the store has it, user report database SHOULD also have the same transaction type
     return render_template('search.html', amount=amount, fromCurrency=fromCurrency, toCurrency=toCurrency)

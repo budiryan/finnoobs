@@ -38,7 +38,7 @@ def index():
 
 
 @app.route('/store/<store_id>', methods=['GET', 'POST'])
-@login_required
+# @login_required
 def store(store_id):
     db = get_db()
     cursor = db.cursor()
@@ -74,21 +74,46 @@ def store(store_id):
     store_submissions = list(cursor.fetchall())
     # Convert all sql objects inside the list to list format
     store_submissions = [list(s) for s in store_submissions]
-    if current_user.getAuthenticated():
-        if current_user.name == username:
-            form = StoreRateSubmissionsForm(request.form)
-        else:
-            # instantiate UserRateSubmissionsForm object
-            form = UserRateSubmissionsForm(request.form)
-        if form.validate_on_submit():
-            flash('Update received, thank you!')
-            time.sleep(2)
-            return redirect('/store/' + store_id)
- 
-        return render_template("store.html", store_uuid=store_uuid, latitude=latitude, longitude=longitude,
-            display_name=display_name, strikes=strikes, safety_ratings=safety_ratings,
-            user_submissions=user_submissions, store_submissions=store_submissions, form=form)
-    else:
+    try:
+        current_user.getAuthenticated()
+
+        if current_user.getAuthenticated():
+            if current_user.name == username:
+                form = StoreRateSubmissionsForm(request.form)
+                if form.validate_on_submit():
+                    fromCurrency = request.form.get('fromCurrency')
+                    toCurrency = request.form.get('toCurrency')
+                    rate = request.form.get('rate')
+                    con = sqlite3.connect(app.config['DATABASE'])
+                    cur = con.cursor()
+                    cur.execute("INSERT INTO storeRateSubmissions (storeUUID, fromCurrency, toCurrency, rate) VALUES (?,?,?,?)", (store_uuid, fromCurrency, toCurrency, rate))
+                    con.commit()
+                    con.close()
+                    # Currently not showing up
+                    flash("Update successful. Thank you!")
+                    time.sleep(2)
+                    return redirect('/store/' + store_id)
+            else:
+                # instantiate UserRateSubmissionsForm object
+                form = UserRateSubmissionsForm(request.form)
+                if form.validate_on_submit():
+                    fromCurrency = request.form.get('fromCurrency')
+                    toCurrency = request.form.get('toCurrency')
+                    rate = request.form.get('rate')
+                    con = sqlite3.connect(app.config['DATABASE'])
+                    cur = con.cursor()
+                    cur.execute("INSERT INTO userRateSubmissions (username, storeUUID, fromCurrency, toCurrency, rate) VALUES (?,?,?,?,?)", (current_user.name, store_uuid, fromCurrency, toCurrency, rate))
+                    con.commit()
+                    con.close()
+                    # Currently not showing up
+                    flash("Update successful. Thank you!")
+                    time.sleep(2)
+                    return redirect('/store/' + store_id)
+     
+            return render_template("store.html", store_uuid=store_uuid, latitude=latitude, longitude=longitude,
+                display_name=display_name, strikes=strikes, safety_ratings=safety_ratings,
+                user_submissions=user_submissions, store_submissions=store_submissions, form=form)
+    except:
         return render_template("storeAnon.html", store_uuid=store_uuid, latitude=latitude, longitude=longitude,
             display_name=display_name, strikes=strikes, safety_ratings=safety_ratings,
             user_submissions=user_submissions, store_submissions=store_submissions)
@@ -97,18 +122,7 @@ def store(store_id):
     # # instantiate UserRateSubmissionsForm object
     # form = StoreRateSubmissionsForm(request.form)
 
-    # if form.validate_on_submit():
-    #     flash('Update received, thank you!')
-    #     fromCurrency = request.form.get('fromCurrency')
-    #     toCurrency = request.form.get('toCurrency')
-    #     rate = request.form.get('rate')
-    #     con = sqlite3.connect(app.config['DATABASE'])
-    #     cur = con.cursor()
-    #     cur.execute("INSERT INTO storeRateSubmissions (storeUUID, fromCurrency, toCurrency, rate) VALUES (?,?,?,?)", (store_uuid, fromCurrency, toCurrency, rate))
-    #     con.commit()
-    #     con.close()
-    #     time.sleep(2)
-    #     return redirect('/store/' + store_id)
+
 
     # return render_template("store.html", store_uuid=store_uuid, latitude=latitude, longitude=longitude,
     #                        display_name=display_name, strikes=strikes, safety_ratings=safety_ratings,

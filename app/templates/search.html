@@ -2,7 +2,65 @@
 <!-- inherit from base.html to take care of the general page structure -->
 
 {% block content %}
-    {{amount}}
-    {{fromCurrency}}
-    {{toCurrency}}
+    <div class="container">
+        <!-- Example response: [[0, 50, 50, 'BUDDY STORE', 4.0, '2017-07-08 09:04:35', 'HKD', 'USD', 0.8]]  <br> -->
+        <div class = "row">
+            <div class = "col-md-9">
+            <div class = "col-md-3">
+            <div class = "well-custom">
+                    <font color="white" size = "5">
+                    <b><span class="pull-right">USD 0.111</span></b>
+                    <br>
+                    </font>
+                <font color = #bebebe>
+                <span class="pull-right">Retrieved from Google Finance</span><br>
+                <span class="pull-right">03:09 PM, 2017/07/08</span><br>
+                </font>
+            </div>
+            </div>
+            </div>
+        </div>
+
+        <hr>
+        {%if filtered_all_rows|length > 0%}
+        {% for row in filtered_all_rows %}
+            <div class="row">
+                <div class="col-md-9">
+                    <b>{{row[3]}}</b><br>
+                    <font color = #ffcc00>
+                        {% for i in range(5)%}
+                          {% if loop.index <= row[4]%}
+                              <span class="glyphicon glyphicon-star"></span>
+                          {% else %}
+                              <span class="glyphicon glyphicon-star-empty"></span>
+                          {% endif %}
+                        {% endfor %}
+                    </font>
+                    <p>4.8 km • Wan Chai, Hong Kong<br>
+                        Opening hour: 10:00 AM  - 08:00 PM
+                </div>
+                <div class = "col-md-3">
+                    <span class = "red">
+                        <b><span class="pull-right">{{row[7]}}&nbsp;{{row[8]}}</span></b>
+                        <br>
+                    </span>
+                    <span class="pull-right">Last updated:&nbsp;{{row[5]}}</span>
+                    <br>
+                    <div class="text-right">
+                        <a href="/store/{{row[0]}}" class="btn btn-success">Leave a Review</a>
+                    </div>
+                </div>
+            </div>
+            <hr/>
+        {% endfor %}
+        {% else %}
+        <div class="row">
+            <div class="col-md-12">
+                <div class="alert alert-danger">
+                    There is no store available!
+                </div>
+            </div>
+        </div>
+        {% endif %}
+    </div>
 {% endblock %}

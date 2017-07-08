@@ -77,15 +77,21 @@ def store(store_id):
 
     if form.validate_on_submit():
         flash('Update received, thank you!')
+
+        fromCurrency = request.form.get('fromCurrency')
+        toCurrency = request.form.get('toCurrency')
+        rate = request.form.get('rate')
+        con = sqlite3.connect(app.config['DATABASE'])
+        cur = con.cursor()
+        cur.execute("INSERT INTO storeRateSubmissions (storeUUID, fromCurrency, toCurrency, rate) VALUES (?,?,?,?)", (store_uuid, fromCurrency, toCurrency, rate))
+        con.commit()
+        con.close()
         time.sleep(2)
         return redirect('/store/' + store_id)
-        
-
-
-
 
     return render_template("store.html", store_uuid=store_uuid, latitude=latitude, longitude=longitude,
                            display_name=display_name, strikes=strikes, safety_ratings=safety_ratings,
+
                            user_submissions=user_submissions, store_submissions=store_submissions, form=form)
 
 

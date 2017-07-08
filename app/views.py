@@ -7,6 +7,7 @@ import sqlite3
 def connect_db():
     """Connects to the specific database."""
     rv = sqlite3.connect(app.config['DATABASE'])
+    rv.commit()
     rv.row_factory = sqlite3.Row
     return rv
 
@@ -98,9 +99,16 @@ def user(username):
 @app.route('/login', methods=['GET', 'POST'])
 def login():
     error = None
+    db = get_db()
+    cursor = db.cursor()
+    result = cursor.execute('SELECT * FROM users')
+
     if request.method == 'POST':
-        if request.form['username'] != 'admin' or request.form['password'] != 'admin':
-            error = 'Invalid Credentials. Please try again.'
-        else:
-            return redirect(url_for('index'))
+        for row in result:
+            r = list(row)
+
+            if request.form['username'] == r[1]: #or request.form['password'] != pwd:
+                return redirect(url_for('index'))
+
+        error = 'Invalid Credentials. Please try again.'
     return render_template('login.html', error=error)

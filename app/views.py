@@ -1,7 +1,7 @@
 from app import app
 from flask import Flask, Response, render_template, g, request, flash, redirect, url_for
 from flask_login import *
-from .forms import LoginForm, SearchForm, UserRateSubmissionsForm, StoreRateSubmissionsForm
+from .forms import LoginForm, SearchForm, UserRateSubmissionsForm, StoreRateSubmissionsForm, SignupForm
 from .login import *
 import sqlite3
 import time
@@ -150,6 +150,21 @@ def login():
                 return redirect(url_for('index'))
         return 'Bad login'
     return render_template("login.html", title='User', form="login")
+
+# SIGNUP PAGE
+@app.route('/signup', methods=['GET', 'POST'])
+def signup():
+    if request.method == 'POST':
+        username = request.form['username']
+        pw = request.form['pw']
+        con = sqlite3.connect(app.config['DATABASE'])
+        cur = con.cursor()
+        cur.execute("INSERT INTO users (username, password) VALUES (?,?)", (username, pw))
+        con.commit()
+        con.close()
+        return redirect(url_for('index'))
+    
+    return render_template("signup.html", form="signup")
 
 # SEARCH PAGE
 @app.route('/search', methods=['POST'])

@@ -203,11 +203,11 @@ def search():
             if row[0] == rating[2]:
                 count += 1
                 rating_sum += rating[1]
-        if count != 0:
+        try:
             average_rating = rating_sum / float(count)
             all_rows[index].append(int(average_rating))
-        else:
-            all_rows[index].append(int(0))
+        except:
+            all_rows[index].append(int(average_rating))
 
     list_of_store_reports = list(cursor.execute('select * from storeRateSubmissions ORDER BY datetime(timestamp) DESC'))
     list_of_store_reports = [list(report) for report in list_of_store_reports]

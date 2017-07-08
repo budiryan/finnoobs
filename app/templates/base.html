@@ -1,29 +1,52 @@
+<!-- take care of the general page structure for all pages -->
+
 {%- extends "bootstrap/base.html" %}
+
 
 {% block title %}    
   {% if title %}
-      {{ title }} - TravelExchange
+      {{ title }} - XchangeFinder
     {% else %}
-      Welcome to TravelExchange
+      Welcome to XchangeFinder
   {% endif %}{% endblock %}
+
 
 
 {% import "bootstrap/fixes.html" as fixes %}
 
+
 {% block head %}
 {{super()}}
-
 {{fixes.ie8()}}
 {%- endblock %}
 
+
 {% block styles -%}
-    {{super()}}  {# do not forget to call super or Bootstrap's own stylesheets
-                    will disappear! #}
+    {{super()}}  {# do not forget to call super or Bootstrap's own stylesheets will disappear! #}
 {% endblock %}
+
 
 {% block navbar %}
-
-
-<h1>FinExchange</h1>
-  <hr/>
+<h1>XchangeFinder</h1>
+<hr/>
 {% endblock %}
+
+
+{% block body %}
+<div>Microblog: <a href="/index">Home</a></div>
+    <hr>
+    {% with messages = get_flashed_messages() %}
+      {% if messages %}
+        <ul>
+        {% for message in messages %}
+            <li>{{ message }} </li>
+        {% endfor %}
+        </ul>
+      {% endif %}
+    {% endwith %}
+    {% block content %}{% endblock %}
+{% endblock %}
+
+
+
+

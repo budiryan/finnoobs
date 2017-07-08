@@ -24,7 +24,7 @@ def get_db():
 
 #User class
 class User(UserMixin):
-	def is_authenticated():
+	def getAuthenticated():
 		return True
 
 	def is_active():

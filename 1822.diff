@@ -1,0 +1,127 @@
+diff --git a/app/login.py b/app/login.py
+index 69b36ea..37ada0d 100644
+--- a/app/login.py
++++ b/app/login.py
+@@ -1,5 +1,6 @@
+ from app import *
+ from flask import Flask, Response, render_template, g, request, flash, redirect, url_for
++from flask.ext.login import LoginManager , login_required , UserMixin , login_user
+ from flask_login import *
+ import sqlite3
+ 
+@@ -24,15 +25,16 @@ def get_db():
+ 
+ #User class
+ class User(UserMixin):
+-	def is_authenticated():
+-		return True
++    def getName():
++        return self.name
+ 
+-	def is_active():
+-		return True
++    def getAuthenticated():
++	    return self.authenticated
+ 
+-	def __init__(self, name):
+-		self.id = name
+-		self.name = name
++    def __init__(self, name):
++        self.name = name
++        self.username = username
++        self.authenticated = True
+ 
+ @login_manager.user_loader
+ def user_loader(name):
+@@ -45,6 +47,7 @@ def user_loader(name):
+ 		r = list(row)
+ 		if name == r[1]: #or pwd != r[2]:
+ 			user = User(name)
++
+ 			return user
+ 	return
+ 
+diff --git a/app/views.py b/app/views.py
+index 3b5bcf0..3a66d1d 100644
+--- a/app/views.py
++++ b/app/views.py
+@@ -74,27 +74,47 @@ def store(store_id):
+     store_submissions = list(cursor.fetchall())
+     # Convert all sql objects inside the list to list format
+     store_submissions = [list(s) for s in store_submissions]
+-
+-    # instantiate UserRateSubmissionsForm object
+-    form = StoreRateSubmissionsForm(request.form)
+-
+-    if form.validate_on_submit():
+-        flash('Update received, thank you!')
+-        fromCurrency = request.form.get('fromCurrency')
+-        toCurrency = request.form.get('toCurrency')
+-        rate = request.form.get('rate')
+-        con = sqlite3.connect(app.config['DATABASE'])
+-        cur = con.cursor()
+-        cur.execute("INSERT INTO storeRateSubmissions (storeUUID, fromCurrency, toCurrency, rate) VALUES (?,?,?,?)", (store_uuid, fromCurrency, toCurrency, rate))
+-        con.commit()
+-        con.close()
+-        time.sleep(2)
+-        return redirect('/store/' + store_id)
+-
+-    return render_template("store.html", store_uuid=store_uuid, latitude=latitude, longitude=longitude,
+-                           display_name=display_name, strikes=strikes, safety_ratings=safety_ratings,
+-
+-                           user_submissions=user_submissions, store_submissions=store_submissions, form=form)
++    current_user = user_loader();
++    if current_user.getAuthenticated():
++        if current_user.getName() == username:
++            form = StoreRateSubmissionsForm(request.form)
++        else:
++            # instantiate UserRateSubmissionsForm object
++            form = UserRateSubmissionsForm(request.form)
++        if form.validate_on_submit():
++            flash('Update received, thank you!')
++            time.sleep(2)
++            return redirect('/store/' + store_id)
++ 
++        return render_template("store.html", store_uuid=store_uuid, latitude=latitude, longitude=longitude,
++            display_name=display_name, strikes=strikes, safety_ratings=safety_ratings,
++            user_submissions=user_submissions, store_submissions=store_submissions, form=form)
++    else:
++        return render_template("storeAnon.html", store_uuid=store_uuid, latitude=latitude, longitude=longitude,
++            display_name=display_name, strikes=strikes, safety_ratings=safety_ratings,
++            user_submissions=user_submissions, store_submissions=store_submissions)
++
++
++    # # instantiate UserRateSubmissionsForm object
++    # form = StoreRateSubmissionsForm(request.form)
++
++    # if form.validate_on_submit():
++    #     flash('Update received, thank you!')
++    #     fromCurrency = request.form.get('fromCurrency')
++    #     toCurrency = request.form.get('toCurrency')
++    #     rate = request.form.get('rate')
++    #     con = sqlite3.connect(app.config['DATABASE'])
++    #     cur = con.cursor()
++    #     cur.execute("INSERT INTO storeRateSubmissions (storeUUID, fromCurrency, toCurrency, rate) VALUES (?,?,?,?)", (store_uuid, fromCurrency, toCurrency, rate))
++    #     con.commit()
++    #     con.close()
++    #     time.sleep(2)
++    #     return redirect('/store/' + store_id)
++
++    # return render_template("store.html", store_uuid=store_uuid, latitude=latitude, longitude=longitude,
++    #                        display_name=display_name, strikes=strikes, safety_ratings=safety_ratings,
++
++    #                        user_submissions=user_submissions, store_submissions=store_submissions, form=form)
+ 
+ 
+ @app.route('/user/<username>', methods=['GET', 'POST'])
+@@ -128,6 +148,7 @@ def login():
+                 user.name = username
+                 user.id = username
+                 login_user(user)
++                user.authenticate()
+                 return redirect(url_for('index'))
+         return 'Bad login'
+     return render_template("login.html", title='User', form="login")
+diff --git a/db/XchangeFinder.db b/db/XchangeFinder.db
+index 7f8fecb..98416d6 100644
+Binary files a/db/XchangeFinder.db and b/db/XchangeFinder.db differ

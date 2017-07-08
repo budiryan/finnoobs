@@ -6,6 +6,7 @@ from .login import *
 from forex_python.converter import CurrencyRates
 import sqlite3
 import time
+import requests
 
 
 
@@ -46,8 +47,13 @@ def store(store_id):
     cursor = db.cursor()
     cursor.execute('select * from stores where storeUUID=' + '"' + store_id + '"')
     row_store_info = list(cursor.fetchone())
-    print(row_store_info)
-    store_uuid, latitude, longitude, display_name, strikes, username, password = row_store_info
+    store_uuid, latitude, longitude, display_name, strikes, username, password, time, image = row_store_info
+
+    # Get the location using python's requests library
+    try:
+        location = requests.get('http://maps.googleapis.com/maps/api/geocode/json?latlng=' + str(latitude) + ',' + str(longitude)).json()['results'][0]['formatted_address']
+    except:
+        location = ''
 
     # Get user's rating (format: username, rating, store_uuid, timestamp)
     cursor.execute('select username, rating, timestamp from safetyRatings where storeUUID=' + store_id)
@@ -111,14 +117,14 @@ def store(store_id):
                     flash("Update successful. Thank you!")
                     time.sleep(2)
                     return redirect('/store/' + store_id)
-     
+
             return render_template("store.html", store_uuid=store_uuid, latitude=latitude, longitude=longitude,
                 display_name=display_name, strikes=strikes, safety_ratings=safety_ratings,
-                user_submissions=user_submissions, store_submissions=store_submissions, form=form)
+                user_submissions=user_submissions, store_submissions=store_submissions, form=form, time=time, image=image, location=location)
     except:
         return render_template("storeAnon.html", store_uuid=store_uuid, latitude=latitude, longitude=longitude,
             display_name=display_name, strikes=strikes, safety_ratings=safety_ratings,
-            user_submissions=user_submissions, store_submissions=store_submissions)
+            user_submissions=user_submissions, store_submissions=store_submissions, time=time, image=image, location=location)
 
 
     # # instantiate UserRateSubmissionsForm object
@@ -226,7 +232,6 @@ def search():
         # LOL only keep if the store has the exchange rate which was required
         if fromCurrency == report[2] and toCurrency == report[3]:
             filtered_list_of_store_reports.append(report)
-    print(filtered_list_of_store_reports)
 
     filtered_all_rows = []
     for index, report in enumerate(filtered_list_of_store_reports):
@@ -234,8 +239,16 @@ def search():
             if report[0] == row[0]:
                 filtered_all_rows.append(row + report[1:])
 
+    for index, row in enumerate(filtered_all_rows): 
+        try:
+            location = requests.get('http://maps.googleapis.com/maps/api/geocode/json?latlng=' + str(row[1]) + ',' + str(row[2])).json()['results'][0]['formatted_address']
+            time.sleep(1)
+            filtered_all_rows[index].append(location)
+        except:
+            location = ''
+
     # Format: Store ID, displayName, avg_rating, fromCurrency, toCurrency, rate
-    # print('filtered: ', filtered_all_rows)
+    print('filtered: ', filtered_all_rows)
 
     # Assuming the store has it, user report database SHOULD also have the same transaction type
     return render_template('search.html', amount=amount, fromCurrency=fromCurrency, toCurrency=toCurrency, 

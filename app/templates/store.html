@@ -1,7 +1,11 @@
 {% extends "base.html" %}
 
 {% block content %}
-display_name: {{display_name}}<br>
+<br>
+<br>
+<br>
+<br>
+<!-- display_name: {{display_name}}<br>
 store_uuid: {{store_uuid}}<br>
 latitude: {{latitude}}<br>
 longitude: {{longitude}}<br>
@@ -9,7 +13,53 @@ strikes: {{strikes}}<br>
 ratings: {{safety_ratings}}<br>
 {# user_submissions=user_submissions, store_submissions=store_submissions #}
 user_submissions={{user_submissions}}<br>
-store_submissions={{store_submissions}}<br>
+store_submissions={{store_submissions}}<br> -->
+
+<div class="container">
+  <div class = "row">
+      <div class = "col-md-6">
+          <img class="img-center" src="{{image}}" alt="" height="256" width="386">
+      </div>
+
+      <div class = "col-md-6">
+          <div class = "text-left">
+              <b>{{display_name}}</b><br>
+                  <font color = #ffcc00>
+                      {% for i in range(5)%}
+                        {% if loop.index <= 4%}
+                            <span class="glyphicon glyphicon-star"></span>
+                        {% else %}
+                            <span class="glyphicon glyphicon-star-empty"></span>
+                        {% endif %}
+                      {% endfor %}
+                  </font>
+              <p>4.8 km • Wan Chai, Hong Kong<br>
+                  Opening time: {{time}}
+              </p>
+              <div class = "row">
+              <p>
+                  <a href="#">Call</a>    
+                  <a href="#">Get Direction</a>
+                  </p>
+              </div>
+          </div>
+      </div>
+  </div>
+  <p></p>
+  <div class = "row">
+      <span class = "col-md-6 col-xs-12"> 
+          <span class = "text-left"><font size = "4"><b>Exchange your rate here</b></font></span>
+          <hr>
+          Input exchange
+          <hr>
+      </span>
+      <span class = "col-md-6 col-xs-12"> 
+          <span class = "text-left"><font size = "4"><b>Reviews</b></font></span>
+          <hr>
+          Input reviews
+          <hr>
+      </span>
+  </div>
 
 
 <h1>Update Store's Exchange Rate</h1>
@@ -31,10 +81,10 @@ store_submissions={{store_submissions}}<br>
       {% for error in form.rate.errors %}
                 <span style="color: red;">[{{error}}  Must be a valid decimal.]</span>
       {% endfor %}
-
       <p>
         <input type="submit" value="Submit new rate!">
       </p>
      </div>
   </form>
+  </div>
 {% endblock %}

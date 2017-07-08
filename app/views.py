@@ -1,5 +1,5 @@
 from app import app
-from flask import Flask, render_template, g, request, flash, redirect, url_for
+from flask import Flask, Response, render_template, g, request, flash, redirect, url_for
 from flask.ext.login import LoginManager, UserMixin, \
                                 login_required, login_user, logout_user 
 from .forms import LoginForm, SearchForm, UserRateSubmissionsForm, UserAddStoreForm
@@ -28,6 +28,7 @@ def get_db():
 # HOMEPAGE
 # The two route decorators above the function create the mappings from URLs / and /index to this function
 @app.route('/', methods=['GET', 'POST'])
+@app.route('/index', methods=['GET', 'POST'])
 def index():
     # returns a string, to be displayed on the client's web browser.
     form = SearchForm(request.form)
@@ -111,25 +112,36 @@ def user(username):
 # LOGIN PAGE
 @app.route('/login', methods=['GET', 'POST'])
 def login():
-    if request.method == 'GET':
-        return
-
     db = get_db()
     cursor = db.cursor()
     result = cursor.execute('SELECT * FROM users')
-
-    username = request.form['username']
-    pw = request.form['pw']
-    for row in result:
-        r = list(row)
-        if username == r[1] and pw == r[2]:
-            user = User(username, pw)
-            user.name = username
-            user.id = username
-            login_user(user)
-            return flask.redirect(flask.url_for('index'))
-
-    return 'Bad login'
+    if request.method == 'POST':
+        # return '''
+        # <form action='login' method='POST'>
+        # <input type='text' name='username' id='username' placeholder='username'></input>
+        # <input type='password' name='pw' id='pw' placeholder='password'></input>
+        # <input type='submit' name='submit'></input>
+        # </form>
+        # '''
+        username = request.form['username']
+        pw = request.form['pw']
+        for row in result:
+            r = list(row)
+            if username == r[1] and pw == r[2]:
+                user = User(username, pw)
+                user.name = username
+                user.id = username
+                login_user(user)
+                return flask.redirect(flask.url_for('index'))
+        return 'Bad login'
+    else:
+        return Response('''
+        <form action="" method="post">
+            <p><input type=text name=username>
+            <p><input type=password name=password>
+            <p><input type=submit value=Login>
+        </form>
+        ''')
 
 # SEARCH PAGE
 @app.route('/search', methods=['POST'])

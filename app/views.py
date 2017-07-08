@@ -1,6 +1,6 @@
 from app import app
 from flask import Flask, render_template, g, request, flash, redirect, url_for
-from .forms import LoginForm, SearchForm, UserRateSubmissionsForm, UserAddStoreForm
+from .forms import LoginForm, SearchForm, UserRateSubmissionsForm, StoreRateSubmissionsForm
 import sqlite3
 import time
 
@@ -42,7 +42,7 @@ def store(store_id):
     cursor.execute('select * from stores where storeUUID=' + '"' + store_id + '"')
     row_store_info = list(cursor.fetchone())
     print(row_store_info)
-    store_uuid, latitude, longitude, display_name, strikes = row_store_info
+    store_uuid, latitude, longitude, display_name, strikes, username, password = row_store_info
 
     # Get user's rating (format: username, rating, store_uuid, timestamp)
     cursor.execute('select username, rating, timestamp from safetyRatings where storeUUID=' + store_id)
@@ -73,11 +73,11 @@ def store(store_id):
     store_submissions = [list(s) for s in store_submissions]
 
     # instantiate UserRateSubmissionsForm object
-    form = UserRateSubmissionsForm(request.form)
+    form = StoreRateSubmissionsForm(request.form)
 
     if form.validate_on_submit():
         flash('Update received, thank you!')
-        time.sleep(3)
+        time.sleep(2)
         return redirect('/store/' + store_id)
         
 

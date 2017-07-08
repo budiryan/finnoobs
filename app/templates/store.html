@@ -1,29 +1,30 @@
 {% extends "base.html" %}
 {% block content %}
+display_name: {{display_name}}<br>
 store_uuid: {{store_uuid}}<br>
 latitude: {{latitude}}<br>
 longitude: {{longitude}}<br>
-display_name: {{display_name}}<br>
 strikes: {{strikes}}<br>
 ratings: {{safety_ratings}}<br>
 {# user_submissions=user_submissions, store_submissions=store_submissions #}
 user_submissions={{user_submissions}}<br>
 store_submissions={{store_submissions}}<br>
 
-<h1>Update Store Exchange Rate</h1>
+
+<h1>Update Store's Exchange Rate</h1>
   <form action="" method="post">
   {{ form.csrf }}
-  	<div class="input text input-lg">
-      <p> If you'd like to update a store's exchange rate, please fill out the form below:</p>
+    <div class="input text input-lg">
+      <p> If you'd like to update this store's exchange rate, please fill out the form below:</p>
       <br>
       <p> From:
-	      <label class="dropdown-inline">
-	      	{{ form.fromCurrency }}
-	      </label>
-	      To:
-	      <label class="dropdown-inline">
-	      	{{ form.toCurrency }}
-	      </label>
+        <label class="dropdown-inline">
+          {{ form.fromCurrency }}
+        </label>
+        To:
+        <label class="dropdown-inline">
+          {{ form.toCurrency }}
+        </label>
       </p>
       <p>{{ form.rate }}</p>
       {% for error in form.rate.errors %}
@@ -31,7 +32,7 @@ store_submissions={{store_submissions}}<br>
       {% endfor %}
 
       <p>
-      	<input type="submit" value="Submit new rate!">
+        <input type="submit" value="Submit new rate!">
       </p>
      </div>
   </form>

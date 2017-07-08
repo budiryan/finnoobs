@@ -207,7 +207,7 @@ def search():
             average_rating = rating_sum / float(count)
             all_rows[index].append(int(average_rating))
         except:
-            all_rows[index].append(int(average_rating))
+            all_rows[index].append(int(0))
 
     list_of_store_reports = list(cursor.execute('select * from storeRateSubmissions ORDER BY datetime(timestamp) DESC'))
     list_of_store_reports = [list(report) for report in list_of_store_reports]

@@ -61,6 +61,7 @@ def store(store_id):
     # Convert all sql objects inside the list to list format
     safety_ratings = [list(s) for s in safety_ratings]
 
+
     # TODO: Do average rating, and prevent same user from voting more than 1 TIME
 
     # Get user's submission on the store's exchange rate
@@ -68,23 +69,25 @@ def store(store_id):
     CREATE TABLE "userRateSubmissions" ( `username` TEXT NOT NULL, `storeUUID` INTEGER NOT NULL, `timestamp` INTEGER NOT NULL, 
                                          `fromCurrency` TEXT NOT NULL, `toCurrency` TEXT NOT NULL, `rate` REAL NOT NULL )
     '''
-    cursor.execute('select username, timestamp, fromCurrency, toCurrency, rate from userRateSubmissions')
+    cursor.execute('select username, timestamp, fromCurrency, toCurrency, rate from userRateSubmissions where storeUUID=' + store_id)
     user_submissions = list(cursor.fetchall())
     # Convert all sql objects inside the list to list format
     user_submissions = [list(u) for u in user_submissions]
+    # Sort based on date
+    user_submissions.sort(key=lambda r: r[0])
 
     # Get store's submission on its own exchange rate
     '''
     CREATE TABLE "storeRateSubmissions" ( `storeUUID` INTEGER NOT NULL, `timestamp` INTEGER NOT NULL, `fromCurrency` TEXT NOT NULL, 
                                           `toCurrency` TEXT NOT NULL, `rate` REAL NOT NULL )
     '''
-    cursor.execute('select timestamp, fromCurrency, toCurrency, rate from storeRateSubmissions')
+    cursor.execute('select timestamp, fromCurrency, toCurrency, rate from storeRateSubmissions where storeUUID=' + store_id)
     store_submissions = list(cursor.fetchall())
     # Convert all sql objects inside the list to list format
     store_submissions = [list(s) for s in store_submissions]
+    store_submissions.sort(key=lambda r:r[0], reverse=True)
     try:
         current_user.getAuthenticated()
-
         if current_user.getAuthenticated():
             if current_user.name == username:
                 form = StoreRateSubmissionsForm(request.form)

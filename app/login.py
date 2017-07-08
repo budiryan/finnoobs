@@ -1,6 +1,5 @@
 from app import *
-from app import views,
-import flask
+from flask import Flask, Response, render_template, g, request, flash, redirect, url_for
 from flask_login import *
 import sqlite3
 
@@ -38,29 +37,29 @@ class User(UserMixin):
 @login_manager.user_loader
 def user_loader(name):
 	name = request.form.get('username')
-    db = get_db()
-    cursor = db.cursor()
-    result = cursor.execute('SELECT * FROM users')
+	db = get_db()
+	cursor = db.cursor()
+	result = cursor.execute('SELECT * FROM users')
 
-    for row in result:
-        r = list(row)
-        if name == r[1]: #or pwd != r[2]:
-            user = User(name)
-            return user
-    return
+	for row in result:
+		r = list(row)
+		if name == r[1]: #or pwd != r[2]:
+			user = User(name)
+			return user
+	return
 
 
 @login_manager.request_loader
 def request_loader(request):
-    name = request.form.get('username')
-    db = get_db()
-    cursor = db.cursor()
-    result = cursor.execute('SELECT * FROM users')
+	name = request.form.get('username')
+	db = get_db()
+	cursor = db.cursor()
+	result = cursor.execute('SELECT * FROM users')
 
-    for row in result:
-    	r = list(row)
-    	if name == r[1]: #or request.form['pw'] != r[2]:
-       		user.is_authenticated = request.form['pw'] == r[2]
-       		user = User(name)
-    		return user
-    return
+	for row in result:
+		r = list(row)
+		if name == r[1]: #or request.form['pw'] != r[2]:
+			user.is_authenticated = request.form['pw'] == r[2]
+			user = User(name)
+			return user
+	return

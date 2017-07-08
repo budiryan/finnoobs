@@ -11,8 +11,8 @@ body {
 /* Header Image Background - Change the URL below to your image path (example: ../images/background.jpg) */
 
 .business-header {
-    height: 400px;
-    background: url('http://cdni.wired.co.uk/1920x1280/a_c/currencies.jpg') center center no-repeat scroll;
+    height: 700px;
+    background: url('https://raw.githubusercontent.com/budiryan/finnoobs/master/startbootstrap-business-frontpage-gh-pages/xfinder.jpg?token=ATEgF12R3AcFZX4vhs_sQ3COrHSu3vEHks5ZaaqQwA%3D%3D') center center no-repeat scroll;
     -webkit-background-size: cover;
     -moz-background-size: cover;
     background-size: cover;

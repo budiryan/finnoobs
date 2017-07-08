@@ -22,3 +22,8 @@ class StoreRateSubmissionsForm(Form):
 	fromCurrency = SelectField(u'from currency', choices=[('RMB', 'RMB'), ('USD', 'USD'), ('EUR', 'EUR'), ('HKD', 'HKD'), ('SGD', 'SGD')], validators=[DataRequired()])
 	toCurrency =  SelectField(u'to currency', choices=[('RMB', 'RMB'), ('USD', 'USD'), ('EUR', 'EUR'), ('HKD', 'HKD'), ('SGD', 'SGD')], validators=[DataRequired()])
 	rate = DecimalField('exchange rate', validators=[DataRequired()])
+
+class UserAddStoreForm(Form):
+	displayName = StringField('exchange rate', validators=[DataRequired()])
+	latitude = DecimalField('latitude', validators=[DataRequired()])
+	longitude = DecimalField('longitude', validators=[DataRequired()])

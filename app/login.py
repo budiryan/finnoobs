@@ -56,8 +56,6 @@ def user_loader(name):
 @login_manager.request_loader
 def request_loader(request):
     name = request.form.get('name')
-    if name != 'admin':
-        return
 
     db = get_db()
     cursor = db.cursor()

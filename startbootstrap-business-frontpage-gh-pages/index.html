@@ -9,7 +9,6 @@
     <meta name="description" content="">
     <meta name="author" content="">
     <title>XFinder</title>
-
     <!-- Bootstrap Core CSS -->
     <link href="css/bootstrap.min.css" rel="stylesheet">
 
@@ -62,47 +61,82 @@
     <!-- Image Background Page Header -->
     <!-- Note: The background image is set within the business-casual.css file. -->
     <header class="business-header">
-        <div class="container">
+        <!-- <div class="container">
             <div class="row">
                 <div class="col-lg-12">
                     <h1 class="tagline">Find Your Best Exchange Rate</h1>
                 </div>
             </div>
-        </div>
+        </div> -->
     </header>
 
     <!-- Page Content -->
     <div class="container">
 
         <hr>
-
         <div class="row">
-            <div class="col-sm-8">
-                <!-- <h2>What We Do</h2>
-                <p>Introduce the visitor to the business using clear, informative text. Use well-targeted keywords within your sentences to make sure search engines can find the business.</p>
-                <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Et molestiae similique eligendi reiciendis sunt distinctio odit? Quia, neque, ipsa, adipisci quisquam ullam deserunt accusantium illo iste exercitationem nemo voluptates asperiores.</p>
-                <p> -->
-                    <div class = "col-xs-3">
-                        <input class = "form-control" id = "ex1" type = "text">
+            <div class="col-sm-8"> <!-- Input Column-->
+              <div class = "row">
+                <div class = "col-xs-7">
+                  <h2> Find Your Exchange Rate </h2>
+                </div>
+              </div>
+              <div class = "row">
+                <div class = "col-xs-7"> <!--Location Textbox-->
+                    <form>
+                      <div class = "input-group">
+                        <span class = "input-group-addon"> <i class = "glyphicon glyphicon-map-marker"> </i> </span>
+                        <input id = "msg" type = "text" class = "form-control" name = "msg" placeholder = "Location">
+                      </div>
+                    </form>
+                </div>
+              </div>
+              <div class = "row">
+                <div class = "col-sm-3">
+                  <div class = "dropdown"> <!--Base Currency-->
+                    <button class = "btn btn-secondary dropdown-toggle" type = "button" id = "baseCurrency" data-toggle ="dropdown"> From
+                      <span class = "caret"> </span> </button>
+                    <ul class = "dropdown-menu">
+                      <li class = "dropdown-item" href = "#"> HKD </li>
+                      <li class = "dropdown-item" href = "#"> USD </li>
+                      <li class = "dropdown-item" href = "#"> SGD </li>
+                      <li class = "dropdown-item" href = "#"> RMB </li>
+                      <li class = "dropdown-item" href = "#"> EUR </li>
+                    </ul>
+                  </div>
+                </div>
+                <div class = "col-sm-3"> <!--Amount Textbox-->
+                  <form>
+                    <div class = "input-group">
+                      <span class = "input-group-addon"> $ </span>
+                      <input id = "amount" type = "text" class = "form-control" name = "msg" placeholder = "Amount">
                     </div>
-                    <div class = "dropdown">
-                        <button class = "btn btn-primary dropdown-toggle" type = "button" data-toggle = "dropdown"> Base Currency
-                          <span class = "caret"> </span> </button>
-                          <ul class = "dropdown-menu">
-                            <li onclick = "dropdown(this.innerHTML);"> <a href = "#"> HKD </a> </li>
-                            <li> <a href = "#"> USD </a> </li>
-                            <li> <a href = "#"> SGD </a> </li>
-                            <li> <a href = "#"> EUR </a> </li>
-                            <li> <a href = "#"> RMB </a> </li>
-                          </ul>
-                    </div>
-
-
-
-                    <!-- <a class="btn btn-default btn-lg" href="#">Call to Action &raquo;</a> -->
-                </p>
+                  </form>
+                </div>
+                <div class = "col-sm-3">
+                  <div class = "dropdown"> <!--Exchanged Currency-->
+                    <button class = "btn btn-secondary dropdown-toggle" type = "button" id = "exchangedCurrency" data-toggle ="dropdown">To
+                      <span class = "caret"> </span> </button>
+                    <ul class = "dropdown-menu" aria-labelledby="exchangedCurrency">
+                      <li class = "dropdown-item" href = "#"> HKD </li>
+                      <li class = "dropdown-item" href = "#"> USD </li>
+                      <li class = "dropdown-item" href = "#"> SGD </li>
+                      <li class = "dropdown-item" href = "#"> RMB </li>
+                      <li class = "dropdown-item" href = "#"> EUR </li>
+                    </ul>
+                  </div>
+                </div>
+              <div class = "col-sm-3"> <!--Dummy Textbox-->
+                <form>
+                  <div class = "input-group">
+                    <span class = "input-group-addon"> $ </span>
+                    <input id = "dummyAmount" type = "text" class = "form-control" name = "msg" placeholder = "">
+                  </div>
+                </form>
+              </div>
             </div>
-            <div class="col-sm-4">
+          </div>
+          <div class="col-sm-4"> <!--Log In Column-->
                 <h2>Contact Us</h2>
                 <address>
                     <strong>Start Bootstrap</strong>
@@ -118,6 +152,7 @@
             </div>
         </div>
         <!-- /.row -->
+
 
         <hr>
 
@@ -146,7 +181,7 @@
         <footer>
             <div class="row">
                 <div class="col-lg-12">
-                    <p>Copyright &copy; Your Website 2014</p>
+                    <p>Copyright &copy; ShibaBugi 2017</p>
                 </div>
             </div>
             <!-- /.row -->

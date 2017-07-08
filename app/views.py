@@ -23,10 +23,12 @@ def get_db():
 # HOMEPAGE
 # The two route decorators above the function create the mappings from URLs / and /index to this function
 @app.route('/', methods=['GET', 'POST'])
-@app.route('/index')
 def index():
     # returns a string, to be displayed on the client's web browser.
     form = SearchForm(request.form)
+    if request.method == 'POST':
+        if form.validate_on_submit():
+            redirect(url_for('search'))
     return render_template("index.html", title='Home', form=form)
 
 
@@ -104,3 +106,12 @@ def login():
         else:
             return redirect(url_for('index'))
     return render_template('login.html', error=error)
+
+
+# SEARCH PAGE
+@app.route('/search', methods=['POST'])
+def search():
+    amount = request.form.get('amount')
+    fromCurrency = request.form.get('fromCurrency')
+    toCurrency = request.form.get('toCurrency')
+    return render_template('search.html', amount=amount, fromCurrency=fromCurrency, toCurrency=toCurrency)

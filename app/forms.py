@@ -7,6 +7,12 @@ class LoginForm(Form):
     openid = StringField('openid', validators=[DataRequired()])
     remember_me = BooleanField('remember_me', default=False)
 
+class SignupForm(Form):
+    username = StringField('username', validators=[DataRequired()])
+    password = StringField('username', validators=[DataRequired()])
+    email = StringField('username', validators=[DataRequired()])
+    remember_me = BooleanField('remember_me', default=False)
+
 class SearchForm(Form):
     #timestamp
     amount = DecimalField('amount', validators=[DataRequired()])

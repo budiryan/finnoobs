@@ -13,6 +13,23 @@
 {{super()}}
 
 {{fixes.ie8()}}
+
+    <meta name="viewport" content="initial-scale=1.0, user-scalable=no">
+    <meta charset="utf-8">
+    <style>
+    /* Always set the map height explicitly to define the size of the div
+    * element that contains the map. */
+    #map {
+    height: 50%;
+    width: 90%;
+    }
+    /* Optional: Makes the sample page fill the window. */
+    html, body {
+    height: 90%;
+    margin: 3;
+    padding: 3;
+    }
+    </style>
 {%- endblock %}
 
 {% block styles -%}
@@ -63,5 +80,5 @@
 {% block javascript %}
   <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
   <link href="{{url_for('static', filename='jquery.raty.js')}}" media="all" rel="stylesheet" type="text/css"/>
-{% endblock %}
 
+{% endblock %}

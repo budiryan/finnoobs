@@ -63,4 +63,45 @@
         </div>
         {% endif %}
     </div>
+            <script>
+
+          function initMap() {
+
+            var map = new google.maps.Map(document.getElementById('map'), {
+              zoom: 10,
+              center: {lat: 22.396, lng: 114.143}
+            });
+
+            // Create an array of alphabetical characters used to label the markers.
+            var labels = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+
+            // Add some markers to the map.
+            // Note: The code uses the JavaScript Array.prototype.map() method to
+            // create an array of markers based on a given "locations" array.
+            // The map() method here has nothing to do with the Google Maps API.
+            var markers = locations.map(function(location, i) {
+              return new google.maps.Marker({
+                position: location,
+                label: labels[i % labels.length]
+              });
+            });
+
+            // Add a marker clusterer to manage the markers.
+            var markerCluster = new MarkerClusterer(map, markers,
+                {imagePath: 'https://developers.google.com/maps/documentation/javascript/examples/markerclusterer/m'});
+          }
+          var locations = [
+            {lat: 22.447218, lng: 114.039856},
+            {lat: 22.368503, lng: 114.128776},
+            {lat: 22.384059, lng: 114.200187},
+            {lat: 22.338338, lng: 114.147316},
+            {lat: 22.318887, lng: 114.176258},
+          ]
+        </script>
+        <script src="https://developers.google.com/maps/documentation/javascript/examples/markerclusterer/markerclusterer.js">
+        </script>
+        <script async defer
+        src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAXGAXaCns4Ztw_3cRFROKPdi4SypSjLT0&callback=initMap">
+        </script>
+        <div id="map" style="left: 5%"></div>
 {% endblock %}

@@ -2,8 +2,12 @@
 <!-- inherit from base.html to take care of the general page structure -->
 
 {% block content %}
-<body>    
-<h1>Welcome to XFinder</h1>
+<body> 
+    {%if current_user.name%}
+        <h1>Welcome to XFinder, {{current_user.name}}</h1>
+    {%else%}
+        <h1>Welcome to XFinder</h1>
+    {%endif%}
     <br>
     <form action="search" method="post">
         {{ form.csrf }}

@@ -1,0 +1,12 @@
+{% extends "base.html" %}
+{% block content %}
+store_uuid: {{store_uuid}}<br>
+latitude: {{latitude}}<br>
+longitude: {{longitude}}<br>
+display_name: {{display_name}}<br>
+strikes: {{strikes}}<br>
+ratings: {{safety_ratings}}<br>
+{# user_submissions=user_submissions, store_submissions=store_submissions #}
+user_submissions={{user_submissions}}<br>
+store_submissions={{store_submissions}}<br>
+{% endblock %}

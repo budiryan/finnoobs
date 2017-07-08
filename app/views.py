@@ -1,6 +1,6 @@
 from app import app
 from flask import render_template, g, request, flash, redirect
-from .forms import LoginForm
+from .forms import LoginForm, UserRateSubmissionsForm, UserAddStoreForm
 import sqlite3
 
 
@@ -70,7 +70,7 @@ def store(store_id):
                            user_submissions=user_submissions, store_submissions=store_submissions)
 
 
-@app.route('/user/<username>', methods=['GET'])
+@app.route('/user/<username>', methods=['GET', 'POST'])
 def user(username):
     '''
     CREATE TABLE "users" ( `strikes` INTEGER NOT NULL DEFAULT 0, `username` TEXT NOT NULL UNIQUE )
@@ -79,8 +79,18 @@ def user(username):
     cursor = db.cursor()
     cursor.execute('select * from users where username=' + '"' + username + '"')
     user_info = list(cursor.fetchone())
-    strikes, username = user_info
-    return render_template("user.html", username=username, strikes=strikes)
+    print(user_info)
+    strikes, username, password = user_info
+
+    # instantiate UserRateSubmissionsForm object
+    form = UserRateSubmissionsForm()
+
+    if form.validate_on_submit():
+        flash('Update received for store "%s", thank you!' %
+              (form.displayName.data))
+        return redirect('/user/<username>')
+
+    return render_template("user.html", username=username, strikes=strikes, form=form)
 
 
 # LOGIN PAGE

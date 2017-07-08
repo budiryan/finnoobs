@@ -1,5 +1,24 @@
+<!-- extend from base layout -->
 {% extends "base.html" %}
+
 {% block content %}
 username:{{username}} <br>
 strikes:{{strikes}}
+
+
+<h1>Update Store Exchange Rate</h1>
+  <form action="" method="post" name="userUpdateStore">
+      <p>
+          If you'd like to update a store's exchange rate, please fill out the form below:<br>
+          {{ form.displayName(size=80) }}
+          {% for error in form.displayName.errors %}
+            <span style="color: red;">[{{error}}]</span>
+          {% endfor %}<br>
+      </p>
+      <p>{{ form.fromCurrency }}</p>
+      <p>{{ form.toCurrency }}</p>
+      <p>{{ form.rate }}</p>
+      <p><input type="submit" value="Submit new rate!"></p>
+  </form>
+
 {% endblock %}

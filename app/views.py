@@ -167,6 +167,12 @@ def login():
         return 'Bad login'
     return render_template("login.html", title='User', form="login")
 
+# LOGOUT PAGE
+@app.route('/logout')
+def logout():
+    logout_user()
+    return redirect(url_for('index'))
+
 # SIGNUP PAGE
 @app.route('/signup', methods=['GET', 'POST'])
 def signup():

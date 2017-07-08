@@ -3,6 +3,13 @@
 
 {% block content %}
 <body> 
+    <header class="header-image">
+        <div class="headline">
+            <div class="container">
+                <h2> <strong> Start Surfing Your Best Price! </strong> </h2>
+            </div>
+        </div>
+    </header>
     {%if current_user.name%}
         <h1>Welcome to XFinder, {{current_user.name}}</h1>
     {%else%}

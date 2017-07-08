@@ -1,6 +1,9 @@
 from app import app
 from flask import Flask, render_template, g, request, flash, redirect, url_for
+from flask.ext.login import LoginManager, UserMixin, \
+                                login_required, login_user, logout_user 
 from .forms import LoginForm, SearchForm, UserRateSubmissionsForm, UserAddStoreForm
+from .login import *
 import sqlite3
 import time
 
@@ -29,7 +32,11 @@ def get_db():
 def index():
     # returns a string, to be displayed on the client's web browser.
     form = SearchForm(request.form)
-    return render_template("index.html", title='Home', form=form)
+    return render_template("index.html", title='Home - User', form=form)
+    # if current_user.is_authenticated:
+    #     return render_template("index.html", title='Home - User', form=form)
+    # else:
+    #     return render_template("store.html", title='Home - Store', form=form)
 
 
 @app.route('/store/<store_id>', methods=['GET', 'POST'])
@@ -106,17 +113,28 @@ def user(username):
 # LOGIN PAGE
 @app.route('/login', methods=['GET', 'POST'])
 def login():
-    error = None
+    if request.method == 'GET':
+        return '''
+               <form action='login' method='POST'>
+                <input type='text' name='username' id='username' placeholder='username'></input>
+                <input type='password' name='pw' id='pw' placeholder='password'></input>
+                <input type='submit' name='submit'></input>
+               </form>
+               '''
+
     db = get_db()
     cursor = db.cursor()
     result = cursor.execute('SELECT * FROM users')
 
-    if request.method == 'POST':
-        for row in result:
-            r = list(row)
+    username = request.form['username']
+    pw = request.form['pw']
+    for row in result:
+        r = list(row)
+        if username == r[1] and pw == r[2]:
+            user = User(username, pw)
+            user.name = username
+            user.id = username
+            login_user(user)
+            return flask.redirect(flask.url_for('index'))
 
-            if request.form['username'] == r[1]: #or request.form['password'] != pwd:
-                return redirect(url_for('index'))
-
-        error = 'Invalid Credentials. Please try again.'
-    return render_template('login.html', error=error)
+    return 'Bad login'

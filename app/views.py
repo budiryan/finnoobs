@@ -194,6 +194,7 @@ def search():
     # Separate query for getting the rating
     list_of_ratings = list(cursor.execute('select * from safetyRatings'))
     list_of_ratings = [list(rating) for rating in list_of_ratings]
+
     # Concatenate each row of all the stores with averaged rating
     for index, row in enumerate(all_rows):
         count = 0
@@ -202,8 +203,11 @@ def search():
             if row[0] == rating[2]:
                 count += 1
                 rating_sum += rating[1]
-        average_rating = rating_sum / float(count)
-        all_rows[index].append(average_rating)
+        if count != 0:
+            average_rating = rating_sum / float(count)
+            all_rows[index].append(int(average_rating))
+        else:
+            all_rows[index].append(int(0))
 
     list_of_store_reports = list(cursor.execute('select * from storeRateSubmissions ORDER BY datetime(timestamp) DESC'))
     list_of_store_reports = [list(report) for report in list_of_store_reports]
@@ -221,7 +225,8 @@ def search():
                 filtered_all_rows.append(row + report[1:])
 
     # Format: Store ID, displayName, avg_rating, fromCurrency, toCurrency, rate
-    print('filtered: ', filtered_all_rows)
+    # print('filtered: ', filtered_all_rows)
 
     # Assuming the store has it, user report database SHOULD also have the same transaction type
-    return render_template('search.html', amount=amount, fromCurrency=fromCurrency, toCurrency=toCurrency)
+    return render_template('search.html', amount=amount, fromCurrency=fromCurrency, toCurrency=toCurrency, 
+                           filtered_all_rows=filtered_all_rows)

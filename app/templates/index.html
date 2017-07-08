@@ -4,16 +4,18 @@
 {% block content %}
 <h1>Welcome to XFinder</h1>
     <br>
-    <form action="" method="post">
+    <form action="search" method="post">
         {{ form.csrf }}
         <div class="input text input-lg">
+            Amount to be exchanged:
             {{ form.amount }}
             {% for error in form.amount.errors %}
-                <span style="color: red;">Query cannot be empty!</span>
+                <span style="color: red;">Please enter a valid number!</span>
             {% endfor %}
             <label class="dropdown-inline">
                 {{form.fromCurrency}}
             </label>
+            &nbsp;to&nbsp;
             <label class="dropdown-inline">
                 {{form.toCurrency}}
             </label>

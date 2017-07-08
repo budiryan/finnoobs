@@ -28,15 +28,21 @@ def get_db():
 # HOMEPAGE
 # The two route decorators above the function create the mappings from URLs / and /index to this function
 @app.route('/', methods=['GET', 'POST'])
-@app.route('/index')
 def index():
     # returns a string, to be displayed on the client's web browser.
     form = SearchForm(request.form)
+<<<<<<< HEAD
     return render_template("index.html", title='Home - User', form=form)
     # if current_user.is_authenticated:
     #     return render_template("index.html", title='Home - User', form=form)
     # else:
     #     return render_template("store.html", title='Home - Store', form=form)
+=======
+    if request.method == 'POST':
+        if form.validate_on_submit():
+            redirect(url_for('search'))
+    return render_template("index.html", title='Home', form=form)
+>>>>>>> 2cca8aea47c58944cdb4c06229c884cf78d7032e
 
 
 @app.route('/store/<store_id>', methods=['GET', 'POST'])
@@ -138,3 +144,11 @@ def login():
             return flask.redirect(flask.url_for('index'))
 
     return 'Bad login'
+
+# SEARCH PAGE
+@app.route('/search', methods=['POST'])
+def search():
+    amount = request.form.get('amount')
+    fromCurrency = request.form.get('fromCurrency')
+    toCurrency = request.form.get('toCurrency')
+    return render_template('search.html', amount=amount, fromCurrency=fromCurrency, toCurrency=toCurrency)

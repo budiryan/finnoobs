@@ -1,8 +1,7 @@
 from app import app
 from flask import Flask, Response, render_template, g, request, flash, redirect, url_for
-from flask.ext.login import LoginManager, UserMixin, \
-                                login_required, login_user, logout_user 
-from .forms import LoginForm, SearchForm, UserRateSubmissionsForm, UserAddStoreForm
+from flask_login import *
+from .forms import LoginForm, SearchForm, UserRateSubmissionsForm, StoreRateSubmissionsForm
 from .login import *
 import sqlite3
 import time
@@ -46,7 +45,7 @@ def store(store_id):
     cursor.execute('select * from stores where storeUUID=' + '"' + store_id + '"')
     row_store_info = list(cursor.fetchone())
     print(row_store_info)
-    store_uuid, latitude, longitude, display_name, strikes = row_store_info
+    store_uuid, latitude, longitude, display_name, strikes, username, password = row_store_info
 
     # Get user's rating (format: username, rating, store_uuid, timestamp)
     cursor.execute('select username, rating, timestamp from safetyRatings where storeUUID=' + store_id)
@@ -77,15 +76,24 @@ def store(store_id):
     store_submissions = [list(s) for s in store_submissions]
 
     # instantiate UserRateSubmissionsForm object
-    form = UserRateSubmissionsForm(request.form)
+    form = StoreRateSubmissionsForm(request.form)
 
     if form.validate_on_submit():
         flash('Update received, thank you!')
-        time.sleep(3)
+        fromCurrency = request.form.get('fromCurrency')
+        toCurrency = request.form.get('toCurrency')
+        rate = request.form.get('rate')
+        con = sqlite3.connect(app.config['DATABASE'])
+        cur = con.cursor()
+        cur.execute("INSERT INTO storeRateSubmissions (storeUUID, fromCurrency, toCurrency, rate) VALUES (?,?,?,?)", (store_uuid, fromCurrency, toCurrency, rate))
+        con.commit()
+        con.close()
+        time.sleep(2)
         return redirect('/store/' + store_id)
 
     return render_template("store.html", store_uuid=store_uuid, latitude=latitude, longitude=longitude,
                            display_name=display_name, strikes=strikes, safety_ratings=safety_ratings,
+
                            user_submissions=user_submissions, store_submissions=store_submissions, form=form)
 
 
@@ -116,11 +124,11 @@ def login():
         for row in result:
             r = list(row)
             if username == r[1] and pw == r[2]:
-                user = User(username, pw)
+                user = User(username)
                 user.name = username
                 user.id = username
                 login_user(user)
-                return flask.redirect(flask.url_for('index'))
+                return redirect(url_for('index'))
         return 'Bad login'
     return render_template("login.html", title='User', form="login")
 

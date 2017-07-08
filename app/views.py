@@ -192,7 +192,7 @@ def search():
     baseline = c.get_rate(fromCurrency, toCurrency)
     db = get_db()
     cursor = db.cursor()
-    all_rows = list(cursor.execute('select storeUUID, latitude, longitude, displayName from stores').fetchall())
+    all_rows = list(cursor.execute('select * from stores').fetchall())
     all_rows = [list(row) for row in all_rows]
 
     # Separate query for getting the rating

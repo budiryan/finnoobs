@@ -31,18 +31,10 @@ def get_db():
 def index():
     # returns a string, to be displayed on the client's web browser.
     form = SearchForm(request.form)
-<<<<<<< HEAD
-    return render_template("index.html", title='Home - User', form=form)
-    # if current_user.is_authenticated:
-    #     return render_template("index.html", title='Home - User', form=form)
-    # else:
-    #     return render_template("store.html", title='Home - Store', form=form)
-=======
     if request.method == 'POST':
         if form.validate_on_submit():
             redirect(url_for('search'))
     return render_template("index.html", title='Home', form=form)
->>>>>>> 2cca8aea47c58944cdb4c06229c884cf78d7032e
 
 
 @app.route('/store/<store_id>', methods=['GET', 'POST'])
@@ -120,13 +112,7 @@ def user(username):
 @app.route('/login', methods=['GET', 'POST'])
 def login():
     if request.method == 'GET':
-        return '''
-               <form action='login' method='POST'>
-                <input type='text' name='username' id='username' placeholder='username'></input>
-                <input type='password' name='pw' id='pw' placeholder='password'></input>
-                <input type='submit' name='submit'></input>
-               </form>
-               '''
+        return
 
     db = get_db()
     cursor = db.cursor()

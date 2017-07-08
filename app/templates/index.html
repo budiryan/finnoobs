@@ -2,5 +2,24 @@
 <!-- inherit from base.html to take care of the general page structure -->
 
 {% block content %}
-<h1>INSERT SOME FANCY HTML HERE</h1>
+<h1>Welcome to XFinder</h1>
+    <br>
+    <form action="" method="post">
+        {{ form.csrf }}
+        <div class="input text input-lg">
+            {{ form.amount }}
+            {% for error in form.amount.errors %}
+                <span style="color: red;">Query cannot be empty!</span>
+            {% endfor %}
+            <label class="dropdown-inline">
+                {{form.fromCurrency}}
+            </label>
+            <label class="dropdown-inline">
+                {{form.toCurrency}}
+            </label>
+            <label class="input submit">
+                <input type="submit" value="Search"/>
+            </label>   
+        </div>
+    </form>
 {% endblock %}

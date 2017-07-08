@@ -10,31 +10,46 @@
             </div>
         </div>
     </header>
-    {%if current_user.name%}
-        <h1>Welcome to XFinder, {{current_user.name}}</h1>
-    {%else%}
-        <h1>Welcome to XFinder</h1>
-    {%endif%}
-    <br>
-    <form action="search" method="post">
-        {{ form.csrf }}
-        <div class="input text input-lg">
-            Amount to be exchanged:
-            {{ form.amount }}
-            {% for error in form.amount.errors %}
-                <span style="color: red;">Please enter a valid number!</span>
-            {% endfor %}
-            <label class="dropdown-inline">
-                {{form.fromCurrency}}
-            </label>
-            &nbsp;to&nbsp;
-            <label class="dropdown-inline">
-                {{form.toCurrency}}
-            </label>
-            <label class="input submit">
-                <input type="submit" value="Search"/>
-            </label>   
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12 text-center">
+                {%if current_user.name%}
+                    <h3>Welcome to XFinder, {{current_user.name}}</h3>
+                {%else%}
+                    <h3>Welcome to XFinder</h3>
+                {%endif%}
+            </div>
         </div>
-    </form>
+        <br>
+        <br>
+        <br>
+        <form action="search" method="post" class="form-group">
+                <div class="row">
+                <div class="col-xs-12 text-center">
+                {{ form.csrf }}
+                Find:
+                {{ form.amount }}
+                {% for error in form.amount.errors %}
+                    <span style="color: red;">Please enter a valid number!</span>
+                {% endfor %}
+                    <label class="dropdown-inline">
+                        {{form.fromCurrency}}
+                    </label>
+                    &nbsp;to&nbsp;
+                    <label class="dropdown-inline">
+                        {{form.toCurrency}}
+                    </label>
+                    </div>
+                    </div>
+                    <br>
+                    <div class="row">
+                        <div class="col-xs-12 text-center">
+                            <button type="submit" value="Search" class="btn btn-primary btn-lg">
+                                Submit
+                            </button>
+                        </div>
+                    </div>
+        </form>
+    </div>
 </body>
 {% endblock %}

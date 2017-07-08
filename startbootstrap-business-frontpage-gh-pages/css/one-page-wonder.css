@@ -8,6 +8,22 @@ body {
     margin-top: 13px; /* Required padding for .navbar-fixed-top. Remove if using .navbar-static-top. Change if height of navigation changes. */
 }
 
+/*
+ * Start Bootstrap - Full (http://startbootstrap.com/)
+ * Copyright 2013-2016 Start Bootstrap
+ * Licensed under MIT (https://github.com/BlackrockDigital/startbootstrap/blob/gh-pages/LICENSE)
+ */
+
+/* Header Image Background - Change the URL below to your image path (example: ../images/background.jpg) */
+
+.full {
+    background: url('https://raw.githubusercontent.com/budiryan/finnoobs/master/startbootstrap-business-frontpage-gh-pages/bg_only.jpg?token=ATEgF8NDXe8jW17F7SHbQTXZdRcyi9uHks5ZahBwwA%3D%3D') no-repeat center center fixed;
+    -webkit-background-size: cover;
+    -moz-background-size: cover;
+    background-size: cover;
+    -o-background-size: cover;
+}
+
 .header-image {
     display: block;
     width: 100%;

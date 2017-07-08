@@ -116,13 +116,6 @@ def login():
     cursor = db.cursor()
     result = cursor.execute('SELECT * FROM users')
     if request.method == 'POST':
-        # return '''
-        # <form action='login' method='POST'>
-        # <input type='text' name='username' id='username' placeholder='username'></input>
-        # <input type='password' name='pw' id='pw' placeholder='password'></input>
-        # <input type='submit' name='submit'></input>
-        # </form>
-        # '''
         username = request.form['username']
         pw = request.form['pw']
         for row in result:
@@ -134,14 +127,7 @@ def login():
                 login_user(user)
                 return flask.redirect(flask.url_for('index'))
         return 'Bad login'
-    else:
-        return Response('''
-        <form action="" method="post">
-            <p><input type=text name=username>
-            <p><input type=password name=password>
-            <p><input type=submit value=Login>
-        </form>
-        ''')
+    return render_template("login.html", title='User', form="login")
 
 # SEARCH PAGE
 @app.route('/search', methods=['POST'])

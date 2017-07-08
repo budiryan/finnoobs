@@ -8,10 +8,10 @@ stored in a template argument named form -->
     <div class="container">
       <h1>Please login</h1>
       <br>
-      <form action="" method="post">
-        <input type="text" placeholder="Username" name="username" value="{{
+      <form method="POST">
+        <input type="text" placeholder="Username" name="username" id='username' value="{{
           request.form.username }}">
-         <input type="password" placeholder="Password" name="password" value="{{
+         <input type="password" placeholder="Password" name="pw" id='pw' value="{{
           request.form.password }}">
         <input class="btn btn-default" type="submit" value="Login">
       </form>

@@ -38,8 +38,8 @@ def index():
 
 
 @app.route('/store/<store_id>', methods=['GET', 'POST'])
+@login_required
 def store(store_id):
-
     db = get_db()
     cursor = db.cursor()
     cursor.execute('select * from stores where storeUUID=' + '"' + store_id + '"')

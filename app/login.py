@@ -24,7 +24,7 @@ def get_db():
 
 #User class
 class User(UserMixin):
-	def getAuthenticated():
+	def getAuthenticated(self):
 		return True
 
 	def is_active():
@@ -34,19 +34,13 @@ class User(UserMixin):
 		self.id = name
 		self.name = name
 
-@login_manager.user_loader
-def user_loader(name):
-	name = request.form.get('username')
-	db = get_db()
-	cursor = db.cursor()
-	result = cursor.execute('SELECT * FROM users')
+	def __repr__(self):
+		return "%s/%s" % (self.id, self.name)
 
-	for row in result:
-		r = list(row)
-		if name == r[1]: #or pwd != r[2]:
-			user = User(name)
-			return user
-	return
+
+@login_manager.user_loader
+def user_loader(id):
+	return User(id)
 
 
 @login_manager.request_loader

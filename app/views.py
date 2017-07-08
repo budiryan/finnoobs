@@ -124,11 +124,11 @@ def login():
         for row in result:
             r = list(row)
             if username == r[1] and pw == r[2]:
-                user = User(username, pw)
+                user = User(username)
                 user.name = username
                 user.id = username
                 login_user(user)
-                return flask.redirect(flask.url_for('index'))
+                return redirect(url_for('index'))
         return 'Bad login'
     return render_template("login.html", title='User', form="login")
 

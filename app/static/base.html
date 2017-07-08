@@ -1,0 +1,89 @@
+<!-- take care of the general page structure for all pages -->
+
+{%- extends "bootstrap/base.html" %}
+
+
+{% block title %}    
+  {% if title %}
+      {{ title }} - XchangeFinder
+    {% else %}
+      Welcome to XchangeFinder
+  {% endif %}{% endblock %}
+
+
+
+{% import "bootstrap/fixes.html" as fixes %}
+
+
+{% block head %}
+{{super()}}
+{{fixes.ie8()}}
+<!-- Styling here-->
+<link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+{%- endblock %}
+
+
+{% block styles -%}
+    {{super()}}  {# do not forget to call super or Bootstrap's own stylesheets will disappear! #}
+{% endblock %}
+
+
+{% block navbar %}
+<h1>XchangeFinder</h1>
+<hr/>
+{% endblock %}
+
+
+{% block body %}
+<!-- <div>XchangeFinder: <a href="/">Home</a></div>
+    <hr>
+    {% with messages = get_flashed_messages() %}
+      {% if messages %}
+        <ul>
+        {% for message in messages %}
+            <li>{{ message }} </li>
+        {% endfor %}
+        </ul>
+      {% endif %}
+    {% endwith %} -->
+        <!-- Navigation -->
+    <nav class="navbar navbar-default navbar-fixed-top" role="navigation">
+        <div class="container">
+            <!-- Brand and toggle get grouped for better mobile display -->
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <!-- <a class="navbar-brand" href="#">XFinder</a> -->
+                <img src="{{ url_for('static', filename='logo.png') }}" alt="" width="150px" height="50px"/>
+            </div>
+            <!-- Collect the nav links, forms, and other content for toggling -->
+            <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+                <ul class="nav navbar-nav navbar-right">
+                    <li>
+                        <a href="/">About</a>
+                    </li>
+                    <li>
+                        <a href="#">Stores</a>
+                    </li>
+                    <li>
+                        <a href="#">Log In</a>
+                    </li>
+                </ul>
+            </div>
+            <!-- /.navbar-collapse -->
+        </div>
+        <!-- /.container -->
+    </nav>
+    
+    {% block content %}
+
+    {% endblock %}
+{% endblock %}
+
+
+
+

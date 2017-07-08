@@ -14,9 +14,6 @@ class SearchForm(Form):
     toCurrency =  SelectField(u'to currency', choices=[('RMB', 'RMB'), ('USD', 'USD'), ('EUR', 'EUR'), ('HKD', 'HKD'), ('SGD', 'SGD')], validators=[DataRequired()])
 
 class UserRateSubmissionsForm(Form):
-	# username
-	displayName = SelectField(u'store', coerce=str, validators=[DataRequired()])
-	#timestamp
 	fromCurrency = SelectField(u'from currency', choices=[('RMB', 'RMB'), ('USD', 'USD'), ('EUR', 'EUR'), ('HKD', 'HKD'), ('SGD', 'SGD')], validators=[DataRequired()])
 	toCurrency =  SelectField(u'to currency', choices=[('RMB', 'RMB'), ('USD', 'USD'), ('EUR', 'EUR'), ('HKD', 'HKD'), ('SGD', 'SGD')], validators=[DataRequired()])
 	rate = DecimalField('exchange rate', validators=[DataRequired()])

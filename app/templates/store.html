@@ -9,4 +9,30 @@ ratings: {{safety_ratings}}<br>
 {# user_submissions=user_submissions, store_submissions=store_submissions #}
 user_submissions={{user_submissions}}<br>
 store_submissions={{store_submissions}}<br>
+
+<h1>Update Store Exchange Rate</h1>
+  <form action="" method="post">
+  {{ form.csrf }}
+  	<div class="input text input-lg">
+      <p> If you'd like to update a store's exchange rate, please fill out the form below:</p>
+      <br>
+      <p> From:
+	      <label class="dropdown-inline">
+	      	{{ form.fromCurrency }}
+	      </label>
+	      To:
+	      <label class="dropdown-inline">
+	      	{{ form.toCurrency }}
+	      </label>
+      </p>
+      <p>{{ form.rate }}</p>
+      {% for error in form.rate.errors %}
+                <span style="color: red;">[{{error}}  Must be a valid decimal.]</span>
+      {% endfor %}
+
+      <p>
+      	<input type="submit" value="Submit new rate!">
+      </p>
+     </div>
+  </form>
 {% endblock %}

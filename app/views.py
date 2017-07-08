@@ -3,8 +3,10 @@ from flask import Flask, Response, render_template, g, request, flash, redirect,
 from flask_login import *
 from .forms import LoginForm, SearchForm, UserRateSubmissionsForm, StoreRateSubmissionsForm, SignupForm
 from .login import *
+from forex_python.converter import CurrencyRates
 import sqlite3
 import time
+
 
 
 def connect_db():
@@ -186,6 +188,8 @@ def search():
     amount = request.form.get('amount')
     fromCurrency = request.form.get('fromCurrency')
     toCurrency = request.form.get('toCurrency')
+    c = CurrencyRates()
+    baseline = c.get_rate(fromCurrency, toCurrency)
     db = get_db()
     cursor = db.cursor()
     all_rows =  list(cursor.execute('select storeUUID, latitude, longitude, displayName from stores').fetchall())
@@ -229,4 +233,4 @@ def search():
 
     # Assuming the store has it, user report database SHOULD also have the same transaction type
     return render_template('search.html', amount=amount, fromCurrency=fromCurrency, toCurrency=toCurrency, 
-                           filtered_all_rows=filtered_all_rows)
+                           filtered_all_rows=filtered_all_rows, baseline=baseline)

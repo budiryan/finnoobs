@@ -1,6 +1,6 @@
 from app import app
 import flask
-from flask.ext.login import LoginManager, UserMixin
+from flask_login import *
 import sqlite3
 from .views import *
 

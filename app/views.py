@@ -1,7 +1,6 @@
 from app import app
 from flask import Flask, Response, render_template, g, request, flash, redirect, url_for
-from flask.ext.login import LoginManager, UserMixin, \
-                                login_required, login_user, logout_user 
+from flask_login import *
 from .forms import LoginForm, SearchForm, UserRateSubmissionsForm, StoreRateSubmissionsForm
 from .login import *
 import sqlite3
@@ -116,20 +115,22 @@ def user(username):
 # LOGIN PAGE
 @app.route('/login', methods=['GET', 'POST'])
 def login():
-    error = None
     db = get_db()
     cursor = db.cursor()
     result = cursor.execute('SELECT * FROM users')
-
     if request.method == 'POST':
+        username = request.form['username']
+        pw = request.form['pw']
         for row in result:
             r = list(row)
-
-            if request.form['username'] == r[1]: #or request.form['password'] != pwd:
-                return redirect(url_for('index'))
-
-        error = 'Invalid Credentials. Please try again.'
-    return render_template('login.html', error=error)
+            if username == r[1] and pw == r[2]:
+                user = User(username, pw)
+                user.name = username
+                user.id = username
+                login_user(user)
+                return flask.redirect(flask.url_for('index'))
+        return 'Bad login'
+    return render_template("login.html", title='User', form="login")
 
 # SEARCH PAGE
 @app.route('/search', methods=['POST'])

@@ -20,7 +20,11 @@ stored in a template argument named form -->
          <input type="text" placeholder="Email" name="email" id='email' value="{{
           request.form.username }}">
         <input class="btn btn-default" type="submit" value="Sign Up">
+        {% for error in request.form.username.errors %}
+          <span style="color: red;">[{{error}}]</span>
+        {% endfor %}
       </form>
+      
       {% if error %}
         <p class="error"><strong>Error:</strong> {{ error }}
       {% endif %}

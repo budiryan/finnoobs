@@ -26,7 +26,8 @@
         </div>
 
         <hr>
-        {%if filtered_all_rows|length > 0%}
+        {%if (filtered_all_rows|length > 0) or (filtered_user_rows|length > 0) %}
+        <h2>Your results with rates entered by stores, sorted by last update:</h4>
         {% for row in filtered_all_rows %}
         	<script>console.log('{{row}}')</script>
             <div class="row">
@@ -50,7 +51,7 @@
                         <b><span class="pull-right">{{row[12]}}&nbsp;{{row[13]}}</span></b>
                         <br>
                     </span>
-                    <span class="pull-right">Last updated:&nbsp;{{row[5]}}</span>
+                    <span class="pull-right">Last updated:&nbsp;{{row[10]}}</span>
                     <br>
                     <div class="text-right">
                         <a href="/store/{{row[0]}}" class="btn btn-success">Leave a Review</a>
@@ -59,6 +60,40 @@
             </div>
             <hr/>
         {% endfor %}
+        <h2>Your results with rates entered by users, sorted by last update:</h4>
+        {% for row in filtered_user_rows %}
+            <script>console.log('{{row}}')</script>
+            <div class="row">
+                <div class="col-md-9">
+                    <b>{{row[3]}}</b><br>
+                    <img src={{row[8]}} height="25%" width="25%"><br>
+                    <font color = #ffcc00>
+                        {% for i in range(5)%}
+                          {% if loop.index <= row[4]%}
+                              <span class="glyphicon glyphicon-star"></span>
+                          {% else %}
+                              <span class="glyphicon glyphicon-star-empty"></span>
+                          {% endif %}
+                        {% endfor %}
+                    </font>
+                    <p>{{row[-1]}}<br>
+                        Opening hour: {{row[7]}}
+                </div>
+                <div class = "col-md-3">
+                    <span class = "red">
+                        <b><span class="pull-right">{{row[12]}}&nbsp;{{row[13]}}</span></b>
+                        <br>
+                    </span>
+                    <span class="pull-right">Submitted:&nbsp;{{row[10]}}</span>
+                    <br>
+                    <div class="text-right">
+                        <a href="/store/{{row[0]}}" class="btn btn-success">Leave a Review</a>
+                    </div>
+                </div>
+            </div>
+            <hr/>
+        {% endfor %}
+
         {% else %}
         <div class="row">
             <div class="col-md-12">

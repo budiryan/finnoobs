@@ -193,6 +193,11 @@ def signup():
         cur.execute("INSERT INTO users (username, password) VALUES (?,?)", (username, pw))
         con.commit()
         con.close()
+        logout_user()
+        user = User(username)
+        user.name = username
+        user.id = username
+        login_user(user)
         return redirect(url_for('index'))
 
     return render_template("signup.html", form="signup")
@@ -251,8 +256,35 @@ def search():
             location = ''
 
     # Format: Store ID, displayName, avg_rating, fromCurrency, toCurrency, rate
-    print('filtered: ', filtered_all_rows)
+    print('Your results with rates entered by stores, sorted by last update:')
+    print(filtered_all_rows)
+
+    list_of_user_reports = list(cursor.execute('select storeUUID, timestamp, fromCurrency, toCurrency, rate from userRateSubmissions ORDER BY datetime(timestamp) DESC'))
+    list_of_user_reports = [list(report) for report in list_of_user_reports]
+    filtered_list_of_user_reports = []
+    for index, report in enumerate(list_of_user_reports):
+        # LOL only keep if the store has the exchange rate which was required
+        if fromCurrency == report[2] and toCurrency == report[3]:
+            filtered_list_of_user_reports.append(report)
+
+    filtered_user_rows = []
+    for index, report in enumerate(filtered_list_of_user_reports):
+        for row in all_rows:
+            if report[0] == row[0]:
+                filtered_user_rows.append(row + report[1:])
+
+    for index, row in enumerate(filtered_user_rows): 
+        try:
+            location = requests.get('http://maps.googleapis.com/maps/api/geocode/json?latlng=' + str(row[1]) + ',' + str(row[2])).json()['results'][0]['formatted_address']
+            time.sleep(1)
+            filtered_user_rows[index].append(location)
+        except:
+            location = ''
+
+    # Format: Store ID, displayName, avg_rating, fromCurrency, toCurrency, rate
+    print('Your results with rates entered by users, sorted by last update:')
+    print(filtered_user_rows)
 
     # Assuming the store has it, user report database SHOULD also have the same transaction type
     return render_template('search.html', amount=amount, fromCurrency=fromCurrency, toCurrency=toCurrency, 
-                           filtered_all_rows=filtered_all_rows, baseline=baseline)
+                           filtered_all_rows=filtered_all_rows, filtered_user_rows=filtered_user_rows, baseline=baseline)

@@ -32,7 +32,8 @@
         	<script>console.log('{{row}}')</script>
             <div class="row">
                 <div class="col-md-9">
-                    <b>{{row[3]}}</b><br>
+                    <a href="/store/{{row[0]}}"><b>{{row[3]}}</b></a>
+                    <br>
                 	<img src={{row[8]}} height="25%" width="25%"><br>
                     <font color = #ffcc00>
                         {% for i in range(5)%}
@@ -54,7 +55,7 @@
                     <span class="pull-right">Last updated:&nbsp;{{row[10]}}</span>
                     <br>
                     <div class="text-right">
-                        <a href="/store/{{row[0]}}" class="btn btn-success">Leave a Review</a>
+                        <a href="https://goo.gl/forms/81y4N29ZuaDvBmtc2" class="btn btn-success">Leave a Review</a>
                     </div>
                 </div>
             </div>
@@ -65,7 +66,8 @@
             <script>console.log('{{row}}')</script>
             <div class="row">
                 <div class="col-md-9">
-                    <b>{{row[3]}}</b><br>
+                    <a href="/store/{{row[0]}}"><b>{{row[3]}}</b></a>
+                    <br>
                     <img src={{row[8]}} height="25%" width="25%"><br>
                     <font color = #ffcc00>
                         {% for i in range(5)%}
@@ -87,7 +89,7 @@
                     <span class="pull-right">Submitted:&nbsp;{{row[10]}}</span>
                     <br>
                     <div class="text-right">
-                        <a href="/store/{{row[0]}}" class="btn btn-success">Leave a Review</a>
+                        <a href="https://goo.gl/forms/81y4N29ZuaDvBmtc2" class="btn btn-success">Leave a Review</a>
                     </div>
                 </div>
             </div>

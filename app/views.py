@@ -193,7 +193,10 @@ def signup():
         cur.execute("INSERT INTO users (username, password) VALUES (?,?)", (username, pw))
         con.commit()
         con.close()
-        logout_user()
+        try:
+            logout_user()
+        except:
+            print("nobody logged in")
         user = User(username)
         user.name = username
         user.id = username

@@ -107,3 +107,27 @@ body {
     background: #FFF1;
     background: rgba(0,0,0,0);
 }
+
+@media screen and (max-width:1000px) {
+    .box:after {
+        content: '';
+        display: table;
+        clear: both;
+    }
+}
+
+.bawah {
+  padding-top: 0px;
+}
+
+.box {
+    margin-bottom: 20px;
+    padding: 30px 15px;
+    background: #fff;
+    background: rgba(255,255,255,0.65);
+}
+
+hr {
+    max-width: 600px;
+    border-color: #999999;
+}

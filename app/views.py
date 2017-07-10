@@ -1,7 +1,7 @@
 from app import app
 from flask import Flask, Response, render_template, g, request, flash, redirect, url_for
 from flask_login import *
-from .forms import LoginForm, SearchForm, UserRateSubmissionsForm, StoreRateSubmissionsForm, SignupForm
+from .forms import LoginForm, SearchForm, UserRateSubmissionsForm, StoreRateSubmissionsForm, SignupForm, SafetyRatingsForm
 from .login import *
 from forex_python.converter import CurrencyRates
 import sqlite3
@@ -41,7 +41,6 @@ def index():
 
 
 @app.route('/store/<store_id>', methods=['GET', 'POST'])
-# @login_required
 def store(store_id):
     db = get_db()
     cursor = db.cursor()
@@ -86,59 +85,70 @@ def store(store_id):
     # Convert all sql objects inside the list to list format
     store_submissions = [list(s) for s in store_submissions]
     store_submissions.sort(key=lambda r:r[0], reverse=True)
+
     try:
         current_user.getAuthenticated()
-        if current_user.getAuthenticated():
-            if current_user.name == username:
-                form = StoreRateSubmissionsForm(request.form)
-                if form.validate_on_submit():
-                    fromCurrency = request.form.get('fromCurrency')
-                    toCurrency = request.form.get('toCurrency')
-                    rate = request.form.get('rate')
-                    con = sqlite3.connect(app.config['DATABASE'])
-                    cur = con.cursor()
-                    cur.execute("INSERT INTO storeRateSubmissions (storeUUID, fromCurrency, toCurrency, rate) VALUES (?,?,?,?)", (store_uuid, fromCurrency, toCurrency, rate))
-                    con.commit()
-                    con.close()
-                    # Currently not showing up
-                    flash("Update successful. Thank you!")
-                    time.sleep(2)
-                    return redirect('/store/' + store_id)
-            else:
-                # instantiate UserRateSubmissionsForm object
-                form = UserRateSubmissionsForm(request.form)
-                if form.validate_on_submit():
-                    fromCurrency = request.form.get('fromCurrency')
-                    toCurrency = request.form.get('toCurrency')
-                    rate = request.form.get('rate')
-                    con = sqlite3.connect(app.config['DATABASE'])
-                    cur = con.cursor()
-                    cur.execute("INSERT INTO userRateSubmissions (username, storeUUID, fromCurrency, toCurrency, rate) VALUES (?,?,?,?,?)", (current_user.name, store_uuid, fromCurrency, toCurrency, rate))
-                    con.commit()
-                    con.close()
-                    # Currently not showing up
-                    flash("Update successful. Thank you!")
-                    time.sleep(2)
-                    return redirect('/store/' + store_id)
-
-            return render_template("store.html", store_uuid=store_uuid, latitude=latitude, longitude=longitude,
-                display_name=display_name, strikes=strikes, safety_ratings=safety_ratings,
-                user_submissions=user_submissions, store_submissions=store_submissions, form=form, time=time, image=image, location=location)
     except:
         return render_template("storeAnon.html", store_uuid=store_uuid, latitude=latitude, longitude=longitude,
             display_name=display_name, strikes=strikes, safety_ratings=safety_ratings,
             user_submissions=user_submissions, store_submissions=store_submissions, time=time, image=image, location=location)
 
+    if current_user.getAuthenticated():
+        rating_form = SafetyRatingsForm(request.form)
 
-    # # instantiate UserRateSubmissionsForm object
-    # form = StoreRateSubmissionsForm(request.form)
+        if current_user.name == username:
+            form = StoreRateSubmissionsForm(request.form)
+            if form.validate_on_submit():
+                fromCurrency = request.form.get('fromCurrency')
+                toCurrency = request.form.get('toCurrency')
+                rate = request.form.get('rate')
+                con = sqlite3.connect(app.config['DATABASE'])
+                cur = con.cursor()
+                cur.execute("INSERT INTO storeRateSubmissions (storeUUID, fromCurrency, toCurrency, rate) VALUES (?,?,?,?)", (store_uuid, fromCurrency, toCurrency, rate))
+                con.commit()
+                con.close()
+                # Currently not showing up
+                flash("Update successful. Thank you!")
+                time.sleep(2)
+                return redirect('/store/' + store_id)
+        else:
+            # instantiate UserRateSubmissionsForm object
+            form = UserRateSubmissionsForm(request.form)
+            if form.validate_on_submit():
+                fromCurrency = request.form.get('fromCurrency')
+                toCurrency = request.form.get('toCurrency')
+                rate = request.form.get('rate')
+                con = sqlite3.connect(app.config['DATABASE'])
+                cur = con.cursor()
+                cur.execute("INSERT INTO userRateSubmissions (username, storeUUID, fromCurrency, toCurrency, rate) VALUES (?,?,?,?,?)", (current_user.name, store_uuid, fromCurrency, toCurrency, rate))
+                con.commit()
+                con.close()
+                # Currently not showing up
+                flash("Update successful. Thank you!")
+                time.sleep(2)
+                return redirect('/store/' + store_id)
 
+        if rating_form.validate_on_submit():
+            rating = request.form.get('rating')
+            con = sqlite3.connect(app.config['DATABASE'])
+            cur = con.cursor()
+            # temporary, will change to take routed store number
+            cur.execute("INSERT INTO safetyRatings (username, rating, storeUUID) VALUES (?,?,?)", (current_user.name, rating, store_id))
+            con.commit()
+            con.close()
+            print("store id")
+            print(store_id)
+            flash("Thanks for your input!")
+            return redirect('/store/' + store_id)
 
-
-    # return render_template("store.html", store_uuid=store_uuid, latitude=latitude, longitude=longitude,
-    #                        display_name=display_name, strikes=strikes, safety_ratings=safety_ratings,
-
-    #                        user_submissions=user_submissions, store_submissions=store_submissions, form=form)
+        return render_template("store.html", store_uuid=store_uuid, latitude=latitude, longitude=longitude,
+            display_name=display_name, strikes=strikes, safety_ratings=safety_ratings,
+            user_submissions=user_submissions, store_submissions=store_submissions, form=form, rating_form=rating_form, time=time, image=image, location=location)
+    
+    else:
+        return render_template("storeAnon.html", store_uuid=store_uuid, latitude=latitude, longitude=longitude,
+            display_name=display_name, strikes=strikes, safety_ratings=safety_ratings,
+            user_submissions=user_submissions, store_submissions=store_submissions, time=time, image=image, location=location)
 
 
 @app.route('/user/<username>', methods=['GET', 'POST'])

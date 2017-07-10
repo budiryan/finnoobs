@@ -13,24 +13,44 @@
       </div>
       <div class = "col-md-6">
           <div class = "text-left">
-              <h3><b>{{display_name}}</b></h3><br>
-                  <font color = #ffcc00>
-                      {% for i in range(5)%}
-                        {% if loop.index <= 4%}
-                            <span class="glyphicon glyphicon-star"></span>
-                        {% else %}
-                            <span class="glyphicon glyphicon-star-empty"></span>
-                        {% endif %}
-                      {% endfor %}
-                  </font>
-              <p>{{location}}<br>
-                  Opening time: {{time}}
+              <h3><b>{{display_name}}</b></h3>
+              <br>
+              <p>{{location}}
+                <br>
+                Opening time: {{time}}
               </p>
-              <div class = "row">
               <p>
                   <a href="#">Call</a>    
                   <a href="#">Get Direction</a>
-                  </p>
+                  <br>
+              </p>
+
+              <font color = #ffcc00>
+                  {% for i in range(5)%}
+                    {% if loop.index <= 4%}
+                        <span class="glyphicon glyphicon-star"></span>
+                    {% else %}
+                        <span class="glyphicon glyphicon-star-empty"></span>
+                    {% endif %}
+                  {% endfor %}
+              </font>
+              <br>
+              <a>Please rate {{display_name}} on its safety</a>
+              <div class="container">
+                <form action="" method="post">
+                  <div class="row">
+                  {{ rating_form.csrf }}
+                      <label class="dropdown-inline">
+                          {{rating_form.rating}}
+                      </label>
+                  </div>
+                  <div class="row">
+                    <input type="submit" value="Rate!">
+                  </div>
+                </form>
+                {% if error %}
+                  <p class="error"><strong>Error:</strong> {{ error }}
+                {% endif %}
               </div>
           </div>
       </div>

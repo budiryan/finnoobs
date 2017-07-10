@@ -13,25 +13,27 @@
       </div>
       <div class = "col-md-6">
           <div class = "text-left">
-              <h3><b>{{display_name}}</b></h3><br>
-                  <font color = #ffcc00>
-                      {% for i in range(5)%}
-                        {% if loop.index <= 4%}
-                            <span class="glyphicon glyphicon-star"></span>
-                        {% else %}
-                            <span class="glyphicon glyphicon-star-empty"></span>
-                        {% endif %}
-                      {% endfor %}
-                  </font>
-              <p>{{location}}<br>
-                  Opening time: {{time}}
+              <h3><b>{{display_name}}</b></h3>
+              <br>
+              <p>{{location}}
+                <br>
+                Opening time: {{time}}
               </p>
-              <div class = "row">
               <p>
                   <a href="#">Call</a>    
                   <a href="#">Get Direction</a>
-                  </p>
-              </div>
+                  <br>
+              </p>
+
+              <font color = #ffcc00>
+                  {% for i in range(5)%}
+                    {% if loop.index <= 4%}
+                        <span class="glyphicon glyphicon-star"></span>
+                    {% else %}
+                        <span class="glyphicon glyphicon-star-empty"></span>
+                    {% endif %}
+                  {% endfor %}
+              </font>
           </div>
       </div>
   </div>
@@ -118,4 +120,5 @@
           </div>
         {% endfor %}
         <hr>
+</div>
 {% endblock %}

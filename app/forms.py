@@ -33,3 +33,6 @@ class UserAddStoreForm(Form):
 	displayName = StringField('exchange rate', validators=[DataRequired()])
 	latitude = DecimalField('latitude', validators=[DataRequired()])
 	longitude = DecimalField('longitude', validators=[DataRequired()])
+
+class SafetyRatingsForm(Form):
+    rating = SelectField(u'from currency', choices=[('1', '1 (least safe)'), ('2', '2'), ('3', '3'), ('4', '4'), ('5', '5 (safest)')], validators=[DataRequired()])

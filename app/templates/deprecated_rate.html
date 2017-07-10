@@ -1,0 +1,53 @@
+<!-- extend from base layout -->
+{% extends "base.html" %}
+
+<!-- This template expects a form object instantiated from the form class
+stored in a template argument named form -->
+
+{% block content %}
+    <br>
+    <br>
+    <br>
+    <br>
+    <div class="container">
+      <h1>Please rate store {{1}} on its safety</h1>
+      <br>
+      <form action="rate" method="post" class="form-group">
+        <div class="row">
+        <div class="col-xs-12 text-center">
+        {{ form.csrf }}
+            <label class="dropdown-inline">
+                {{form.rating}}
+            </label>
+        </div>
+        </div>
+        <br>
+        <div class="row">
+            <div class="col-xs-12 text-center">
+                <button type="submit" value="Submit" class="btn btn-primary btn-lg">
+                    Submit
+                </button>
+            </div>
+        </div>
+      </form>
+      {% if error %}
+        <p class="error"><strong>Error:</strong> {{ error }}
+      {% endif %}
+    </div>
+{% endblock %}
+
+# # RATINGS PAGE
+# @app.route('/rate', methods=['GET', 'POST'])
+# @login_required
+# def rate():
+#     if request.method == 'POST':
+#         rating = request.form['rating']
+#         con = sqlite3.connect(app.config['DATABASE'])
+#         cur = con.cursor()
+#         # temporary, will change to take routed store number
+#         cur.execute("INSERT INTO safetyRatings (username, rating, storeUUID) VALUES (?,?)", (current_user.name, rating, 1))
+#         con.commit()
+#         con.close()
+#         return redirect('/store/' + store_id)
+
+#     return render_template("rate.html", form="rate")
